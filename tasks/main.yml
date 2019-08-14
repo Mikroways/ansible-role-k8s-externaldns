@@ -1,0 +1,48 @@
+---
+- name: Install extra packages
+  yum:
+    name:
+      - epel-release
+    state: present
+
+- name: Ensure Pip is installed
+  yum:
+    name:
+      - python-pip
+      - gcc
+      - python-devel
+      - libgit2-devel
+      - libffi-devel
+      - git
+    state: present
+
+- name: Update pip
+  pip:
+    name: pip
+    state: latest
+
+- name: Ensure pyhelm and dependencies are installed.
+  pip:
+    name:
+      - pygit2
+      - pyhelm
+      - grpcio
+    state: present
+
+- name: Install older version of requests for pyhelm
+  pip:
+    name:
+      - requests
+    state: latest
+
+- name: install externaldns via helm
+  helm:
+    chart:
+      name: stable/external-dns
+      version: 1.14.0
+      source:
+        type: repo
+        location: https://kubernetes-charts.storage.googleapis.com
+    state: present
+    name: external-dns
+    namespace: stable/external-dns
