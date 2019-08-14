@@ -1,48 +1,33 @@
 ---
-- name: Install extra packages
-  yum:
-    name:
-      - epel-release
-    state: present
+- set_fact:
+    tun_pid_file: /tmp/helm_pid
 
-- name: Ensure Pip is installed
-  yum:
-    name:
-      - python-pip
-      - gcc
-      - python-devel
-      - libgit2-devel
-      - libffi-devel
-      - git
-    state: present
+- block:
+    - name: set up a tunnel to tiller
+      shell: |
+        export tiller_pod="$(kubectl get pod -l app=helm,name=tiller --namespace kube-system -o name|cut -d/ -f2)"
+        nohup kubectl port-forward "$tiller_pod" 44134:44134 --namespace kube-system </dev/null >/dev/null 2>&1 &
+        echo "$!" >{{ tun_pid_file|quote }}
+      args:
+        creates: "{{ tun_pid_file }}"
+      changed_when: false
 
-- name: Update pip
-  pip:
-    name: pip
-    state: latest
-
-- name: Ensure pyhelm and dependencies are installed.
-  pip:
-    name:
-      - pygit2
-      - pyhelm
-      - grpcio
-    state: present
-
-- name: Install older version of requests for pyhelm
-  pip:
-    name:
-      - requests
-    state: latest
-
-- name: install externaldns via helm
-  helm:
-    chart:
-      name: stable/external-dns
-      version: 1.14.0
-      source:
-        type: repo
-        location: https://kubernetes-charts.storage.googleapis.com
-    state: present
-    name: external-dns
-    namespace: stable/external-dns
+    - name: install externaldns via helm
+      helm:
+        chart:
+          name: external-dns
+          version: "{{ externaldns_version }}"
+          source:
+            type: repo
+            location: https://kubernetes-charts.storage.googleapis.com
+        state: "{{ 'present' if externaldns_enabled else 'absent' }}"
+        name: external-dns
+        namespace: external-dns
+  always:
+    - name: tear down the tunnel to tiller
+      shell: |
+        kill "$(cat {{ tun_pid_file|quote }})" || true
+        rm -f {{ tun_pid_file|quote }}
+      args:
+        removes: "{{ tun_pid_file }}"
+      changed_when: false
