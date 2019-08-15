@@ -1,3 +1,4 @@
 ---
 externaldns_enabled: false
 externaldns_version: 2.5.2
+externaldns_values: {}

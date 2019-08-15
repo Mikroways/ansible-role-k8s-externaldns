@@ -24,6 +24,7 @@
         state: "{{ 'present' if externaldns_enabled else 'absent' }}"
         name: external-dns
         namespace: external-dns
+        values: "{{ externaldns_values }}"
   always:
     - name: tear down the tunnel to tiller
       shell: |
