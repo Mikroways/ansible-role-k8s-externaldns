@@ -5,7 +5,7 @@
 - block:
     - name: tear down the tunnel to tiller if already is taken
       shell: |
-        kill "$(cat {{ tun_pid_file|quote }})" || true
+        kill -9 "$(cat {{ tun_pid_file|quote }})" || true
         rm -f {{ tun_pid_file|quote }}
       args:
         removes: "{{ tun_pid_file }}"
@@ -33,7 +33,7 @@
   always:
     - name: tear down the tunnel to tiller
       shell: |
-        kill "$(cat {{ tun_pid_file|quote }})" || true
+        kill -9 "$(cat {{ tun_pid_file|quote }})" || true
         rm -f {{ tun_pid_file|quote }}
       args:
         removes: "{{ tun_pid_file }}"
