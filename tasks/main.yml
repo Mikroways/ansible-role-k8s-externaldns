@@ -21,7 +21,7 @@
           source:
             type: repo
             location: https://kubernetes-charts.storage.googleapis.com
-        state: "{{ 'present' if externaldns_enabled else 'absent' }}"
+        state: "{{ 'present' if externaldns_enabled else 'purged' }}"
         name: external-dns
         namespace: external-dns
         values: "{{ externaldns_values }}"
