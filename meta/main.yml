@@ -24,4 +24,4 @@ galaxy_info:
     - externaldns
 
 dependencies:
-- matiferrigno.k8s_helm
+- mikroways.k8s_helm
