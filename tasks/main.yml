@@ -6,7 +6,7 @@
     
     - name: set up a tunnel to tiller
       shell: |
-        export tiller_pod="$(kubectl get pod -l app=helm,name=tiller --namespace kube-system -o name|cut -d/ -f2)"
+        echo $PATH & export tiller_pod="$(kubectl get pod -l app=helm,name=tiller --namespace kube-system -o name|cut -d/ -f2)"
         nohup kubectl port-forward "$tiller_pod" 44134:44134 --namespace kube-system </dev/null >/dev/null 2>&1 &
         echo "$!" >{{ tun_pid_file|quote }}
       args:

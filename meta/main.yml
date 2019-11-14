@@ -1,7 +1,7 @@
 ---
 
 galaxy_info:
-  role_name: k8s_externaldns
+  role_name: m7s_externaldns
   author: 'Matias Ferrigno'
   description: 'Install externaldns and deploy on k8s'
   company: 'Mikroways'
@@ -24,4 +24,4 @@ galaxy_info:
     - externaldns
 
 dependencies:
-- mikroways.k8s_helm
+- mikroways.m7s_helm
