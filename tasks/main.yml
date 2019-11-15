@@ -17,14 +17,14 @@
       helm:
         chart:
           name: external-dns
-          version: "{{ externaldns_version }}"
+          version: "{{ m7s_k8s_externaldns_version }}"
           source:
             type: repo
             location: https://kubernetes-charts.storage.googleapis.com
-        state: "{{ 'present' if externaldns_enabled else 'purged' }}"
+        state: "{{ 'present' if m7s_k8s_externaldns_enabled else 'purged' }}"
         name: external-dns
         namespace: external-dns
-        values: "{{ externaldns_values }}"
+        values: "{{ m7s_k8s_externaldns_values }}"
   always:
     - name: tear down the tunnel to tiller
       shell: |

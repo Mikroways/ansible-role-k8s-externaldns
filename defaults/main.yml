@@ -1,4 +1,4 @@
 ---
-externaldns_enabled: false
-externaldns_version: 2.5.2
-externaldns_values: {}
+m7s_k8s_externaldns_enabled: false
+m7s_k8s_externaldns_version: 2.5.2
+m7s_k8s_externaldns_values: {}
